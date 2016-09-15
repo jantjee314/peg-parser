@@ -2,7 +2,7 @@ __author__ = 'jan'
 
 terminals = "ab"
 nonterminals = "A"
-rules = {"A":"(aA)/E"}
+rules = {"A":"(aAb)/E"}
 FAIL = "failure"
 PARSEFAIL= "parse failure"
 
@@ -30,6 +30,13 @@ def match (e, w):
                 return result
             result2 = match(expressions[1][1:],w)
             return result2[0] + result[0], result2[1]
+        # repetitions
+        if expressions[1][0] == "*":
+            result = match(expressions[0], w)
+            if result[1] == FAIL:
+                return (0, "")
+            result2 = match(expressions[0] + expressions[1], w.replace(result[1],"", 1))
+            return (result2[0] + result[0] + 1, result[1] + result2[1])
         #concat
         result = match(expressions[0], w)
         if result[1] == FAIL:
@@ -62,6 +69,6 @@ def split(e):
 
 
 print(match("a/b", "b"))
-print(match("A", "aaaaa"))
+print(match("a*", "aaaaa"))
 
 
