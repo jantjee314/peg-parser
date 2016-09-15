@@ -13,10 +13,8 @@ def match (e, w):
         e=""
     if len(e) == 0:
         return (1,"")
-    if len (w) == 0:
-        return (1, FAIL)
     if len(e) == 1 and e[0] in terminals:
-        if e == w[0]:
+        if len(w) > 0 and e == w[0]:
             return (1, e)
         else:
             return (1, FAIL)
@@ -32,19 +30,24 @@ def match (e, w):
                 return result
             result2 = match(expressions[1][1:],w)
             return result2[0] + result[0], result2[1]
-
+        #concat
         result = match(expressions[0], w)
         if result[1] == FAIL:
             return (result[0] + 1, FAIL)
-        result2 = match(expressions[1], w.replace(result[1], "",1))
+        w = w.replace(result[1], "",1)
+        result2 = match(expressions[1], w)
         if result2[1] == FAIL:
             return (result[0] + result2[0] + 1, FAIL)
         else:
             return (result2[0] + result[0] + 1, result[1] + result2[1])
+    if len(w) == 0:
+        return (1,FAIL)
     else:
         return (1, PARSEFAIL)
 
 
+
+#split expressions
 def split(e):
     if e[0] == "(":
         expres1 = ""
@@ -59,6 +62,6 @@ def split(e):
 
 
 print(match("a/b", "b"))
-print(match("A", "aaabaaab"))
+print(match("A", "aaaaa"))
 
 
