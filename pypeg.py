@@ -3,8 +3,8 @@ __author__ = 'jan'
 terminals = "abc"
 nonterminals = "ABD"
 rules = {
-    "A":"aAb/E",
-    "B":"bBc/E",
+    "A":"(aAb)/E",
+    "B":"(bBc)/E",
     "D":"!(!(A!b))a*B!(a/b/c)"
 }
 FAIL = "failure"
@@ -47,8 +47,13 @@ def match (e, w):
         if expressions[1][0] == "*":
             result = match(expressions[0], w)
             if result[1] == FAIL:
-                return (0, "")
-            result2 = match(expressions[0] + expressions[1], w.replace(result[1],"", 1))
+                result2 = match(expressions[1][1:], w)
+                if result2[1] == FAIL:
+                    return result[0] + result2[0] + 1, FAIL
+                return result[0] + result2[0] + 1, result2[1]
+            result2 = match("(" + expressions[0] + ")" + expressions[1], w.replace(result[1],"", 1))
+            if result2[1] == FAIL:
+                return (result2[0] + result[0] + 1, FAIL)
             return (result2[0] + result[0] + 1, result[1] + result2[1])
         # concat
         result = match(expressions[0], w)
@@ -85,7 +90,7 @@ def split(e):
 
 
 
-print(match("!a", "aaa"))
-print(match("a*", "abaaaa"))
+print(match("a*!bc*", "aaaccccc"))
+print(match("D", "aabbcc"))
 
 
