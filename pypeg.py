@@ -1,11 +1,11 @@
 __author__ = 'jan'
 
 terminals = "abc"
-nonterminals = "ABD"
+nonterminals = "ABCD"
 rules = {
     "A":"(aAb)/E",
     "B":"(bBc)/E",
-    "D":"!(!(A!b))a*B!(a/b/c)"
+    "D":"!(!(A!b))a*B!(a/b/c)",
 }
 FAIL = "failure"
 PARSEFAIL= "parse failure"
@@ -32,7 +32,8 @@ def match (e, w):
             result = match(expressions[0], w)
             if result[1] != FAIL:
                 return (result[0] + 1, FAIL)
-            return match(expressions[1],w)
+            result1 =  match(expressions[1],w)
+            return result1[0] + result[0] + 1, result1[1]
         expressions = split(e)
         if len(expressions[1]) == 0:
             return match(expressions[0],w)
@@ -90,7 +91,15 @@ def split(e):
 
 
 
-print(match("a*!bc*", "aaaccccc"))
-print(match("D", "aabbcc"))
+print(match("(!(!(a*))a)*", "a"))
+
+r = match("(!(!(a*))a)*", "a" * 10)
+r2 = match("(!(!(a*))a)*", "a" * 50)
+r3 = match("(!(!(a*))a)*", "a" * 100)
+print (str(r[0]) + " :: " + str(r2[0]) + " :: " + str(r3[0]))
+print(r2[0] / r[0])
+print(r3[0] / r2[0])
+origin = r[0]
+
 
 
