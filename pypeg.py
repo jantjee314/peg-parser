@@ -1,11 +1,10 @@
 __author__ = 'jan'
 
 terminals = "abc"
-nonterminals = "ABCD"
+nonterminals = "ZT"
 rules = {
-    "A":"(aAb)/E",
-    "B":"(bBc)/E",
-    "D":"!(!(A!b))a*B!(a/b/c)",
+    "T":"a/b/c",
+    "Z":"TZ/E", 
 }
 FAIL = "failure"
 PARSEFAIL= "parse failure"
@@ -89,17 +88,9 @@ def split(e):
     else:
         return e[0], e[1:]
 
-
-
-print(match("(!(!(a*))a)*", "a"))
-
-r = match("(!(!(a*))a)*", "a" * 10)
-r2 = match("(!(!(a*))a)*", "a" * 50)
-r3 = match("(!(!(a*))a)*", "a" * 100)
-print (str(r[0]) + " :: " + str(r2[0]) + " :: " + str(r3[0]))
-print(r2[0] / r[0])
-print(r3[0] / r2[0])
-origin = r[0]
-
+expression = raw_input("enter expression:")
+print(match("Z", str(expression)))
+print(match("((a(Z/E))/E)bb*", str(expression)))
+print(match("!abb*", str(expression)))
 
 
