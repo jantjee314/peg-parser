@@ -4,7 +4,7 @@ terminals = "abc"
 nonterminals = "ZT"
 rules = {
     "T":"a/b/c",
-    "Z":"TZ/E", 
+    "Z":"(TZ)/E", 
 }
 FAIL = "failure"
 PARSEFAIL= "parse failure"
@@ -90,7 +90,7 @@ def split(e):
 
 expression = raw_input("enter expression:")
 print(match("Z", str(expression)))
-print(match("((a(Z/E))/E)bb*", str(expression)))
-print(match("!abb*", str(expression)))
-
+print(match("((((baZ)/E)TZ)/E)ba*", str(expression)))
+print(match("!(!a)a*b*", str(expression)))
+print(match("((((baZ)/E)Z)/E)ba*", str(expression)))
 
